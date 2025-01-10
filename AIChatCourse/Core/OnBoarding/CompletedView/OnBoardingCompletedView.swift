@@ -18,7 +18,7 @@ struct OnBoardingCompletedView: View {
                 onFinishButtonTapped()
             } label: {
                 Text("Finish")
-                    .callToActionButton()
+                    .asCallToActionButton()
             }
         }
         .padding(16)

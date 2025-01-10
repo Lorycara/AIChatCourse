@@ -52,10 +52,10 @@ extension WelcomeView {
     private var getStartedButton: some View {
         NavigationLink {
             // finish on boasrding and enter onboarding completed
-            OnBoardingCompletedView()
+            OnBoardingIntroView()
         } label: {
             Text("Get Started")
-                .callToActionButton()
+                .asCallToActionButton()
         }
         .padding(.vertical, 8)
 

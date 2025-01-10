@@ -8,10 +8,11 @@
 import SwiftUI
 
 extension View {
-    func callToActionButton() -> some View {
+    func asCallToActionButton() -> some View {
         self
             .frame(maxWidth: .infinity)
             .frame(height: 55)
+            .fontWeight(.semibold)
             .background(.accent)
             .foregroundColor(.white)
             .cornerRadius(16)
