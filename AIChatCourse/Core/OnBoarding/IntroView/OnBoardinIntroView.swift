@@ -20,13 +20,18 @@ struct OnBoardingIntroView: View {
             
             continueButton
         }
+        .toolbar(.hidden, for: .navigationBar)
         .padding(16)
     }
+    
 }
 
 #Preview {
-    OnBoardingIntroView()
-        .environment(AppState())
+    NavigationStack {
+        OnBoardingIntroView()
+    }
+    .environment(AppState())
+
 }
 
 extension OnBoardingIntroView {

@@ -18,9 +18,9 @@ struct OnBoardingColorView: View {
             alignment: .center,
             spacing: 16,
             content: {
-                if selectedColor != nil {
+                if let selectedColor {
                     ZStack {
-                        ctaButton
+                        ctaButton(color: selectedColor)
                     }
                     .padding(.vertical, 16)
                     .background(Color(uiColor: .systemBackground))
@@ -29,12 +29,15 @@ struct OnBoardingColorView: View {
         )
         .animation(.bouncy, value: selectedColor)
         .padding(.horizontal, 24)
-        
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 
 #Preview {
-    OnBoardingColorView()
+    NavigationStack {
+        OnBoardingColorView()
+    }
+    .environment(AppState())
 }
 
 extension OnBoardingColorView {
@@ -74,9 +77,9 @@ extension OnBoardingColorView {
         }
     }
     
-    private var ctaButton: some View {
+    private func ctaButton(color: Color) -> some View {
         NavigationLink {
-            OnBoardingCompletedView()
+                OnBoardingCompletedView(selectedColor: color)
         } label: {
             Text("Continue")
                 .asCallToActionButton()
