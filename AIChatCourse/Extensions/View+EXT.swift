@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension View {
+    // MARK: BUTTONS
     func asCallToActionButton() -> some View {
         self
             .frame(maxWidth: .infinity)

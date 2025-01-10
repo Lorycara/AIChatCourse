@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct ExploreView: View {
+    let avatar: AvatarModel = AvatarModel.mock // why?
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            HeroCellView(title: avatar.name, subTitle: avatar.characterDescription, imageName: avatar.profileImageName)
+                .frame(height: 200)
+                .padding()
+        }
     }
 }
 
