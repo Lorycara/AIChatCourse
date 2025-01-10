@@ -21,9 +21,7 @@ struct ProfileView: View {
                     }
                 }
         }
-        .sheet(isPresented: Binding(get: {
-            (showSettingsView && appState.showTabBar)
-        }, set: {showSettingsView = $0}) ) {
+        .sheet(isPresented: $showSettingsView) {
             SettingsView()
         }
     }
