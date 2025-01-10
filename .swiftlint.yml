@@ -7,7 +7,8 @@ file_length:
 
 disabled_rules:
   - trailing_whitespace
-
+  - trailing_newline
+  
 excluded:
   - .git
   - Pods

@@ -15,8 +15,10 @@ struct AppViewBuilder<TabBarView: View, OnBoardingView: View>: View {
         ZStack {
             if showTabBar {
                 tabBarView
+                    .transition(.move(edge: .trailing))
             } else {
                 onBoardingView
+                    .transition(.move(edge: .leading))
             }
         }
         .animation(.smooth, value: showTabBar)

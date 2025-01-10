@@ -7,30 +7,29 @@
 
 import SwiftUI
 
-// tabbar - signed in
-// on boarding - signed out
-
 struct AppView: View {
-    @AppStorage("showTabbarView") var showTabBar: Bool = false
+    @State var appState: AppState = .init()
+    
     var body: some View {
         AppViewBuilder(
-            showTabBar: showTabBar,
+            showTabBar: appState.showTabBar,
             tabBarView: {
-                Color.red.ignoresSafeArea(.all)
+                TabBarView()
             },
             onBoardingView: {
-                Color.blue.ignoresSafeArea(.all)
+                WelcomeView()
             }
         )
-        .onTapGesture {
-            showTabBar.toggle()
+        .environment(appState)
+        .onAppear(){
+            print(appState.showTabBar)
         }
     }
 }
 
 #Preview("AppView - TabBar") {
-    AppView(showTabBar: true)
+    AppView(appState: .init(showTabBar: true))
 }
 #Preview("AppView - OnBoarding") {
-    AppView(showTabBar: false)
+    AppView(appState: .init(showTabBar: false))
 }

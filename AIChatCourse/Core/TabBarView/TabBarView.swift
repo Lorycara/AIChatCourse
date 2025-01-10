@@ -1,0 +1,34 @@
+//
+//  TabBarView.swift
+//  AIChatCourse
+//
+//  Created by Lorenzo Cara on 10/01/25.
+//
+
+import SwiftUI
+
+struct TabBarView: View {
+    var body: some View {
+        TabView {
+            ChatsView()
+                .tabItem {
+                    Label("Explore", systemImage: "eyes")
+                }
+            
+            ExploreView()
+                .tabItem {
+                    Label("Chats", systemImage: "bubble.left.and.bubble.right")
+                }
+            
+            ProfileView()
+                .tabItem {
+                    Label("Profile", systemImage: "person")
+                }
+            
+        }
+    }
+}
+
+#Preview {
+    TabBarView()
+}
