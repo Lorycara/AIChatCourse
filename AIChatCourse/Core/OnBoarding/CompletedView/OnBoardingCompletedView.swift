@@ -25,7 +25,7 @@ struct OnBoardingCompletedView: View {
     }
     
     private func onFinishButtonTapped() {
-        //logic to complete boarding
+        // logic to complete boarding
         
         root.updateViewState(showTabBarView: true)
         print(root.showTabBar)

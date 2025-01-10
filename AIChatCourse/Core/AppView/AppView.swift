@@ -21,7 +21,7 @@ struct AppView: View {
             }
         )
         .environment(appState)
-        .onAppear(){
+        .onAppear {
             print(appState.showTabBar)
         }
     }

@@ -11,7 +11,6 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AppState.self) private var appState
     
-    
     var body: some View {
         NavigationStack {
             List {
@@ -30,7 +29,7 @@ struct SettingsView: View {
         
         dismiss()
         
-        Task{
+        Task {
             try? await Task.sleep(for: .seconds(1))
         }
         
