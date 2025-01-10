@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct AvatarModel: Codable {
+struct AvatarModel: Codable, Hashable {
     // parameters
     let avatarID: String
     let name: String?
@@ -16,7 +16,7 @@ struct AvatarModel: Codable {
     let profileImageName: String?
     let authorId: String?
     let dateCreated: Date?
-    var characterDescription: String?{
+    var characterDescription: String? {
         DescriptionBuilder.init(avatar: self).characterDescription
     }
     
@@ -61,7 +61,7 @@ enum CharacterLocation: String, Codable {
     static var `default`: Self { .home }
 }
 
-//MARK: DESCRIPTION BUILDER
+// MARK: DESCRIPTION BUILDER
 struct DescriptionBuilder {
     var characterOption: CharacterOption
     var characterAction: CharacterAction
