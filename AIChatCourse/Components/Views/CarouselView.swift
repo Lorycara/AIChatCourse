@@ -18,14 +18,14 @@ struct CarouselView<T: Hashable, V: View>: View {
     @Namespace private var selectionCircle
     
     var body: some View {
-        Group {
+        VStack {
             pagingScroll
-            .onChange(of: avatars.count, { _, _ in
-                updateSelection()
-            })
-            .onAppear {
-                updateSelection()
-            }
+                .onChange(of: avatars.count, { _, _ in
+                    updateSelection()
+                })
+                .onAppear {
+                    updateSelection()
+                }            
             
             bullets
         }
@@ -77,6 +77,7 @@ extension CarouselView {
                     .frame(width: 8, height: 8)
             }
         }
+        .frame(maxWidth: .infinity, alignment: .center)
     }
 }
 

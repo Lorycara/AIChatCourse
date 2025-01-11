@@ -43,10 +43,19 @@ struct AvatarModel: Codable, Hashable {
 }
 
 // MARK: ENUMS
-enum CharacterOption: String, Codable {
+enum CharacterOption: String, CaseIterable, Hashable, Codable {
     case man, woman, alien, dog, cat
     
     static var `default`: Self { .man }
+    
+    var startsWithAVowel: Bool {
+        switch self {
+        case .alien:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 enum CharacterAction: String, Codable {
@@ -68,7 +77,8 @@ struct DescriptionBuilder {
     var characterLocation: CharacterLocation
     
     var characterDescription: String {
-        "A \(characterOption.rawValue) who is \(characterAction.rawValue) in \(characterLocation.rawValue)"
+        let prefix = characterOption.startsWithAVowel ? "An" : "A"
+        return "\(prefix) \(characterOption.rawValue) who is \(characterAction.rawValue) in the \(characterLocation.rawValue)"
     }
     init(characterOption: CharacterOption, characterAction: CharacterAction, characterLocation: CharacterLocation) {
         self.characterOption = characterOption
