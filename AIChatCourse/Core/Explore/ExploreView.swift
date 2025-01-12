@@ -32,7 +32,7 @@ struct ExploreView: View {
 }
 
 #Preview {
-    let avatars: [AvatarModel] = AvatarModel.mocks // why?
+    let avatars: [AvatarModel] = AvatarModel.mocks  //why?
 
     ExploreView()
 //    CarouselView(avatars: avatars, content: {HeroCellView(avatar: $0)})
