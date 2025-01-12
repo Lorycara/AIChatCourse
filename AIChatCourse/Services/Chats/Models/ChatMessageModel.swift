@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct ChatMessageModel {
+struct ChatMessageModel: Identifiable {
     let id: String
     let chatId: String
     let authorId: String?
@@ -58,7 +58,7 @@ extension ChatMessageModel {
                 id: UUID().uuidString,
                 chatId: "chat_002",
                 authorId: "user_004",
-                content: "Can we meet tomorrow?",
+                content: "Can we meet tomorrow CAN WE? WE DO WE NEED TO I NEED JAKJNDKJDJHQKJEJE",
                 seenByIds: ["user_005"],
                 dateCreated: Date().addingDateInterval(days: -2) // 2 days ago
             ),
