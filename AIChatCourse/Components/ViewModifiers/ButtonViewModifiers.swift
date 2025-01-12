@@ -52,6 +52,7 @@ extension View {
         }
         .buttonStyle(PlainButtonStyle())
     }
+    
     private func highlightButton(action: @escaping () -> Void) -> some View {
         Button {
             action()
@@ -69,6 +70,13 @@ extension View {
         }
         .buttonStyle(PressableButtonStyle())
     }
+    
+    func removeListRowFormatting() -> some View {
+        self
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            .listRowBackground(Color.clear)
+    }
+
 }
 
 #Preview {

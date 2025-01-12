@@ -58,7 +58,7 @@ extension HeroCellView {
         self.imageName = imageName
     }
     
-    init(avatar: AvatarModel){
+    init(avatar: AvatarModel) {
         self.title = avatar.name
         self.imageName = avatar.profileImageName
         self.subTitle = avatar.characterDescription
