@@ -38,7 +38,7 @@ struct ProfileView: View {
             SettingsView()
         }
         .fullScreenCover(isPresented: $showCreateAvatarView) {
-            Text("create avatar")
+            CreateAvatarView()
         }
     }
 }
@@ -67,10 +67,9 @@ extension ProfileView {
             Section {
                 if avatars.isEmpty {
                     Group {
-                        if isLoading{
+                        if isLoading {
                             ProgressView()
-                        }
-                        else{
+                        } else {
                             Text("Click + to Create an Avatar")
                         }
                     }

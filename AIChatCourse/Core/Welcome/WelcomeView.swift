@@ -9,6 +9,9 @@ import SwiftUI
 
 struct WelcomeView: View {
     @State var imageName = Constants.randomImage
+    
+    @State var showCreateAccountView: Bool = false
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -26,6 +29,10 @@ struct WelcomeView: View {
                 .padding(16)
             }
             .ignoresSafeArea()
+            .sheet(isPresented: $showCreateAccountView) {
+                CreateAccountView(logOption: .signIn)
+                    .presentationDetents([.medium])
+            }
         }
     }
 }
@@ -67,7 +74,7 @@ extension WelcomeView {
                 .padding(8)
                 .tappableBackground()
                 .onTapGesture {
-                    // TO ADD
+                    showCreateAccountView.toggle()
                 }
     }
     

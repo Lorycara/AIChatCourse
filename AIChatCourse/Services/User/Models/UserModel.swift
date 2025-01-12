@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct UserModel{
+struct UserModel {
     let userId: String
     let dateCreated: Date?
     let didCompleteOnboarding: Bool?

@@ -14,7 +14,7 @@ struct ChatMessageModel {
     let seenByIds: [String]?
     let dateCreated: Date?
     
-    func hasBeenSeenBy(userId: String)-> Bool {
+    func hasBeenSeenBy(userId: String) -> Bool {
         guard let seenByIds else { return false }
         return seenByIds.contains(userId)
         

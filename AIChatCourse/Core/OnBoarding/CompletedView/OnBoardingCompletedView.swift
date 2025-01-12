@@ -55,19 +55,24 @@ struct OnBoardingCompletedView: View {
 }
 
 extension OnBoardingCompletedView {
+//    private var ctaButton: some View {
+//        Button {
+//            onFinishButtonTapped()
+//        } label: {
+//            if isCompletingProfileSetup {
+//                ProgressView()
+//                    .tint(selectedColor)
+//                    .asCallToActionButton()
+//            } else {
+//                Text("Finish")
+//                    .asCallToActionButton()
+//            }
+//        }
+//        .disabled(isCompletingProfileSetup)
+//    }
     private var ctaButton: some View {
-        Button {
+        AsyncCallToActionButton(title: "Finish", isLoading: isCompletingProfileSetup) {
             onFinishButtonTapped()
-        } label: {
-            if isCompletingProfileSetup {
-                ProgressView()
-                    .tint(selectedColor)
-                    .asCallToActionButton()
-            } else {
-                Text("Finish")
-                    .asCallToActionButton()
-            }
         }
-        .disabled(isCompletingProfileSetup)
     }
 }
