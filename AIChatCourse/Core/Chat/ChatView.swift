@@ -7,52 +7,6 @@
 
 import SwiftUI
 
-// MARK: TO MOVE AVAWAY
-extension Binding where Value == Bool {
-    init<T: Sendable>(ifNotNil value: Binding<T?>) {
-        self.init {
-            value.wrappedValue != nil
-        } set: { newValue in
-        if !newValue {
-            value.wrappedValue = nil
-        }
-    }
-
-    }
-}
-
-extension View {
-    func showCustomAlert(alert: Binding<AnyAppAlert?>) -> some View {
-        self
-            .alert(alert.wrappedValue?.title ?? "", isPresented: Binding(ifNotNil: alert)) {
-                alert.wrappedValue?.buttons()
-            } message: {
-                Text(alert.wrappedValue?.subTilte ?? "")
-            }
-    }
-}
-
-struct AnyAppAlert: Sendable {
-    var title: String
-    var subTilte: String?
-    var buttons: @Sendable () -> AnyView
-    
-    init(
-        title: String,
-        subTilte: String? = nil,
-        buttons: (@Sendable () -> AnyView)? = nil
-    ) {
-        self.title = title
-        self.subTilte = subTilte
-        self.buttons = buttons ?? {
-            AnyView(
-                Button("OK") {}
-            )}
-    }
-}
-
-// MARK: VIEW
-
 struct ChatView: View {
     @State private var avatar: AvatarModel = .mock
     @State private var chatMessages: [ChatMessageModel] = ChatMessageModel.mocks
@@ -61,15 +15,17 @@ struct ChatView: View {
     @State private var showChatSettings: Bool = false
     @State private var scrollPosition: String?
     @State private var showAlert: AnyAppAlert?
-//    @State private var alertTitle: String?
-//    @State private var textfieldAlert: TextValidationError?
-
+    @State private var showModal: Bool = false
+    
     var body: some View {
         VStack {
             scrollMessagesSection
             
             textFieldSection
         }
+        .showModal($showModal, transition: .slide, content: {
+            profileModal(avatar: avatar)
+        })
         .animation(.default, value: userTextField)
         .animation(.default, value: chatMessages)
         .toolbar {
@@ -118,7 +74,7 @@ extension ChatView {
         ScrollView {
             chatListSection
                 .rotationEffect(.degrees(180))
-
+            
         }
         .scrollPosition(id: $scrollPosition, anchor: .center)
         .rotationEffect(.degrees(180))
@@ -131,8 +87,10 @@ extension ChatView {
         LazyVStack(spacing: 10) {
             ForEach(chatMessages) { message in
                 let isCurrentUser = message.authorId == currentUser?.userId
-                ChatBubbleViewBuilder(message: message, isCurrentUser: isCurrentUser, avatarImageName: isCurrentUser ? nil : avatar.profileImageName)
-                    .id(message.id)
+                ChatBubbleViewBuilder(message: message, isCurrentUser: isCurrentUser, avatarImageName: isCurrentUser ? nil : avatar.profileImageName, onImagePressed: {
+                    showModal.toggle()
+                })
+                .id(message.id)
             }
             
         }
@@ -163,6 +121,13 @@ extension ChatView {
         .padding()
         .background(Color(UIColor.secondarySystemBackground))
     }
+    
+    private func profileModal(avatar: AvatarModel) -> some View {
+        ProfileModalsView(imageName: avatar.profileImageName ?? "", title: avatar.name, subtitle: avatar.characterOption?.rawValue, headline: avatar.characterDescription, onXmarkPressed: {
+            showModal = false
+        })
+        .padding(40)
+    }
 }
 
 // MARK: LOGIC
@@ -179,17 +144,7 @@ extension ChatView {
             showAlert = AnyAppAlert(
                 title: "Error",
                 subTilte: error.localizedDescription
-//                buttons: {
-//                    AnyView(
-//                        Group {
-//                            Button("Oka") {}
-//                            Button("Hello") {}
-//                        }
-//                    )
-//                }
             )
-//            textfieldAlert = error as? TextValidationError
-            // alert
         }
     }
 }

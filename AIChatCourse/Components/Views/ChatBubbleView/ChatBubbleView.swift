@@ -14,10 +14,14 @@ struct ChatBubbleView: View {
     var imageName: String? = Constants.randomImage
     var showImage: Bool = true
     var offSet: CGFloat = 14
+    var onImagePressed: (() -> Void)?
     
     var body: some View {
         HStack(alignment: .top) {
             imageSection
+                .anyButtonStyle(.plain) {
+                    onImagePressed?()
+                }
             
             contentSection
         }
@@ -39,12 +43,14 @@ struct ChatBubbleView: View {
 
 // MARK: CONVENIENCE INITIALIZER
 extension ChatBubbleView {
-    init(text: String, imageName: String?, isCurrentUser: Bool) {
+    init(text: String, imageName: String?, isCurrentUser: Bool, onImagePressed: (() -> Void)? = nil
+) {
         self.text = text
         self.imageName = imageName
         self.backgroundColor = isCurrentUser ? .accent : Color(UIColor.systemGray6)
         self.textColor = isCurrentUser ? .white : .primary
         self.showImage = !isCurrentUser
+        self.onImagePressed = onImagePressed
     }
     
 }
@@ -58,7 +64,7 @@ extension ChatBubbleView {
                 if let imageName {
                     ImageLoaderView(urlString: imageName)
                         
-                } else{
+                } else {
                     Rectangle()
                         .fill(Color(uiColor: UIColor.systemGray))
                 }

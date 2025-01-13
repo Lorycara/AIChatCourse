@@ -11,6 +11,7 @@ import SDWebImageSwiftUI
 struct ImageLoaderView: View {
     var urlString: String
     var resizingMode: ContentMode = .fill
+    var forceTransitionAnimation: Bool = false
     
     var body: some View {
         Rectangle()
@@ -23,7 +24,14 @@ struct ImageLoaderView: View {
                     .allowsHitTesting(false)
             }
             .clipped()
-        
+            .ifSatisfiedCondition(forceTransitionAnimation) { content in
+                content
+                    .drawingGroup()
+                    .onAppear {
+                        print(forceTransitionAnimation)
+                    }
+            }
+//            .drawingGroup()
     }
 }
 
@@ -31,3 +39,4 @@ struct ImageLoaderView: View {
     ImageLoaderView(urlString: "https://picsum.photos/600/600")
         .frame(width: 260, height: 400)
 }
+
