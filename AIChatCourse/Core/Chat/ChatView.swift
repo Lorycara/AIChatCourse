@@ -7,13 +7,63 @@
 
 import SwiftUI
 
+// MARK: TO MOVE AVAWAY
+extension Binding where Value == Bool {
+    init<T: Sendable>(ifNotNil value: Binding<T?>) {
+        self.init {
+            value.wrappedValue != nil
+        } set: { newValue in
+        if !newValue {
+            value.wrappedValue = nil
+        }
+    }
+
+    }
+}
+
+extension View {
+    func showCustomAlert(alert: Binding<AnyAppAlert?>) -> some View {
+        self
+            .alert(alert.wrappedValue?.title ?? "", isPresented: Binding(ifNotNil: alert)) {
+                alert.wrappedValue?.buttons()
+            } message: {
+                Text(alert.wrappedValue?.subTilte ?? "")
+            }
+    }
+}
+
+struct AnyAppAlert: Sendable {
+    var title: String
+    var subTilte: String?
+    var buttons: @Sendable () -> AnyView
+    
+    init(
+        title: String,
+        subTilte: String? = nil,
+        buttons: (@Sendable () -> AnyView)? = nil
+    ) {
+        self.title = title
+        self.subTilte = subTilte
+        self.buttons = buttons ?? {
+            AnyView(
+                Button("OK") {}
+            )}
+    }
+}
+
+// MARK: VIEW
+
 struct ChatView: View {
     @State private var avatar: AvatarModel = .mock
     @State private var chatMessages: [ChatMessageModel] = ChatMessageModel.mocks
     @State private var currentUser: UserModel? = UserModel.mock
     @State private var userTextField: String = ""
     @State private var showChatSettings: Bool = false
-    
+    @State private var scrollPosition: String?
+    @State private var showAlert: AnyAppAlert?
+//    @State private var alertTitle: String?
+//    @State private var textfieldAlert: TextValidationError?
+
     var body: some View {
         VStack {
             scrollMessagesSection
@@ -31,16 +81,17 @@ struct ChatView: View {
             }
         }
         .confirmationDialog("What would you like to do?", isPresented: $showChatSettings) {
-            Button("Delete Chat", role: .destructive){
+            Button("Delete Chat", role: .destructive) {
                 
             }
-            Button("Report User / Chat", role: .destructive){
+            Button("Report User / Chat", role: .destructive) {
                 
             }
         } message: {
             Text("What would you like to do?")
         }
-
+        .showCustomAlert(alert: $showAlert)
+        
     }
 }
 
@@ -49,6 +100,7 @@ struct ChatView: View {
         ChatView()
     }
 }
+
 // MARK: COMPONENTS
 extension ChatView {
     private var sendButton: some View {
@@ -68,6 +120,7 @@ extension ChatView {
                 .rotationEffect(.degrees(180))
 
         }
+        .scrollPosition(id: $scrollPosition, anchor: .center)
         .rotationEffect(.degrees(180))
         .padding(8)
         .navigationTitle(avatar.name ?? "")
@@ -79,7 +132,9 @@ extension ChatView {
             ForEach(chatMessages) { message in
                 let isCurrentUser = message.authorId == currentUser?.userId
                 ChatBubbleViewBuilder(message: message, isCurrentUser: isCurrentUser, avatarImageName: isCurrentUser ? nil : avatar.profileImageName)
+                    .id(message.id)
             }
+            
         }
     }
     
@@ -114,8 +169,27 @@ extension ChatView {
 extension ChatView {
     private func onSendButtonPressed() {
         guard let currentUser else { return }
-        let message = ChatMessageModel(id: UUID().uuidString, chatId: UUID().uuidString, authorId: currentUser.userId, content: userTextField, seenByIds: nil, dateCreated: .now)
-        chatMessages.append(message)
-        userTextField = ""
+        do {
+            try TextValidationHelper.checkTexfIsValid(text: userTextField)
+            let message = ChatMessageModel(id: UUID().uuidString, chatId: UUID().uuidString, authorId: currentUser.userId, content: userTextField, seenByIds: nil, dateCreated: .now)
+            chatMessages.append(message)
+            userTextField = ""
+            scrollPosition = message.id
+        } catch let error {
+            showAlert = AnyAppAlert(
+                title: "Error",
+                subTilte: error.localizedDescription
+//                buttons: {
+//                    AnyView(
+//                        Group {
+//                            Button("Oka") {}
+//                            Button("Hello") {}
+//                        }
+//                    )
+//                }
+            )
+//            textfieldAlert = error as? TextValidationError
+            // alert
+        }
     }
 }

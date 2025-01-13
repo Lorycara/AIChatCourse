@@ -41,3 +41,4 @@ struct ChatsView: View {
 #Preview {
     ChatsView(chats: ChatModel.mocks)
 }
+
