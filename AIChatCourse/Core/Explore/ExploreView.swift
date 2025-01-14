@@ -26,6 +26,12 @@ struct ExploreView: View {
             }
             .navigationTitle("Explore")
             .navigationDestinationForCoreModule(path: $path)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Image(systemName: "bell.fill")
+                        .foregroundStyle(.accent)
+                }
+            }
         }
         .task {
             getData()
