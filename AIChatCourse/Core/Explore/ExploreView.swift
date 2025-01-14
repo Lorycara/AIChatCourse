@@ -12,9 +12,11 @@ struct ExploreView: View {
     @State var categories: [CharacterOption] = CharacterOption.allCases
     @State var popularAvatars: [AvatarModel] = []
     
+    @State private var path: [NavigationPathOption] = []
+    
     var body: some View {
         
-        NavigationStack {
+        NavigationStack(path: $path) {
             VStack {
                 List {
                     featuredAvatarsSection
@@ -23,6 +25,7 @@ struct ExploreView: View {
                 }
             }
             .navigationTitle("Explore")
+            .navigationDestinationForCoreModule(path: $path)
         }
         .task {
             getData()
@@ -51,8 +54,11 @@ extension ExploreView {
     private var featuredAvatarsSection: some View {
         Section {
             ZStack {
-                CarouselView(avatars: avatars, content: {HeroCellView(avatar: $0)
-                        .anyButtonStyle(.plain) {}})
+                CarouselView(avatars: avatars, content: { avatar in
+                    HeroCellView(avatar: avatar)
+                        .anyButtonStyle(.plain) {
+                            onAvatarPressed(avatar: avatar)
+                        }})
             }
             .removeListFormatting()
 
@@ -64,11 +70,11 @@ extension ExploreView {
     private var categoriesSection: some View {
         Section {
             ZStack {
-                CategoryCarouselView(images: Array(repeating: Constants.randomImage, count: categories.count), categories: categories)
+                CategoryCarouselView(images: Array(repeating: Constants.randomImage, count: categories.count), categories: categories, onCellPressed: { category in
+                    let imageName = popularAvatars.first(where: { $0.characterOption == category})
+                    onCategoryPressed(category: category, imageName: imageName?.profileImageName ?? "")
+                })
                     .frame(height: 150)
-                    .anyButtonStyle {
-                        
-                    }
             }
             .removeListFormatting()
 
@@ -82,12 +88,26 @@ extension ExploreView {
             ForEach(popularAvatars, id: \.self) { avatar in
                 CustomListCellView(avatar: avatar)
                     .anyButtonStyle(.highlight) {
-                        print("patataatatat")
+                        onAvatarPressed(avatar: avatar)
                     }
                     .removeListFormatting()
             }
         } header: {
             Text("Popular")
         }
+    }
+}
+
+// MARK: LOGIC
+
+extension ExploreView {
+    private func onAvatarPressed(avatar: AvatarModel){
+        let newOption = NavigationPathOption.chat(avatarId: avatar.avatarID)
+        path.append(newOption)
+    }
+    
+    private func onCategoryPressed(category: CharacterOption, imageName: String){
+        let newOption = NavigationPathOption.category(category: category, imageName: imageName)
+        path.append(newOption)
     }
 }

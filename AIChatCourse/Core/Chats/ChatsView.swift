@@ -10,9 +10,11 @@ import SwiftUI
 struct ChatsView: View {
     @State var chats: [ChatModel] = ChatModel.mocks
     
+    @State private var path: [NavigationPathOption] = []
+
     var body: some View {
         
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 ForEach(chats) { chat in
                     ChatRowCellViewBuilder(
@@ -20,20 +22,21 @@ struct ChatsView: View {
                         chat: chat,
                         getAvatar: {
                             try? await Task.sleep(for: .seconds(1))
-                            return .mock
+                            return .mocks.randomElement()
                         },
                         getMessages: {
                             try? await Task.sleep(for: .seconds(1))
-                            return .mock
+                            return .mocks.randomElement()
                         }
                     )
                     .anyButtonStyle(.highlight, action: {
-                        
+                        onAvatarPressed(avatarId: chat.avatarId)
                     })
                     .removeListRowFormatting()
                 }
             }
             .navigationTitle("ciai")
+            .navigationDestinationForCoreModule(path: $path)
         }
     }
 }
@@ -42,3 +45,11 @@ struct ChatsView: View {
     ChatsView(chats: ChatModel.mocks)
 }
 
+
+extension ChatsView {
+    private func onAvatarPressed(avatarId: String){
+        let newOption = NavigationPathOption.chat(avatarId: avatarId)
+        path.append(newOption)
+    }
+    
+}

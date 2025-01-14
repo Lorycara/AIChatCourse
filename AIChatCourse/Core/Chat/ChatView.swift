@@ -17,6 +17,8 @@ struct ChatView: View {
     @State private var showAlert: AnyAppAlert?
     @State private var showModal: Bool = false
     
+    var avatarId: String = UUID().uuidString
+    
     var body: some View {
         VStack {
             scrollMessagesSection

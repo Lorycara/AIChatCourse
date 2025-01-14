@@ -13,6 +13,8 @@ struct CategoryList: View {
     var imageName: String = Constants.randomImage
     @State private var avatars: [AvatarModel] = AvatarModel.mocks
     
+    @Binding var path: [NavigationPathOption]
+    
     var body: some View {
         List {
                 imageCell
@@ -21,12 +23,11 @@ struct CategoryList: View {
         }
         .listStyle(PlainListStyle())
         .ignoresSafeArea(edges: .top)
-
     }
 }
 
 #Preview {
-    CategoryList()
+    CategoryList( path: .constant([]))
 }
 
 // MARK: COMPONENTS
@@ -50,11 +51,19 @@ extension CategoryList {
             Section {
                 ForEach(avatars, id: \.self) { avatar in
                     CustomListCellView(avatar: avatar)
-                    
+                        .anyButtonStyle {
+                            onAvatarPressed(avatar: avatar)
+                        }
                 }
             }
             .removeListRowFormatting()
+    }
+}
 
-        
+// MARK: LOGIC
+extension CategoryList {
+    private func onAvatarPressed(avatar: AvatarModel){
+        let newOption = NavigationPathOption.chat(avatarId: avatar.avatarID)
+        path.append(newOption)
     }
 }

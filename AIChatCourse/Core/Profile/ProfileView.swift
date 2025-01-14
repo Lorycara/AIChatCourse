@@ -15,8 +15,10 @@ struct ProfileView: View {
     @State var avatars: [AvatarModel] =  []
     @State var isLoading: Bool = true
     
+    @State private var path: [NavigationPathOption] = []
+    
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 myInfoSection
                 
@@ -29,6 +31,8 @@ struct ProfileView: View {
                     settingsButton
                 }
             }
+            .navigationDestinationForCoreModule(path: $path)
+
         }
         .task {
             try? await loadData()
@@ -81,7 +85,7 @@ extension ProfileView {
                     ForEach(avatars, id: \.self) { avatar in
                         CustomListCellView(urlString: avatar.profileImageName, title: avatar.name)
                             .anyButtonStyle(.highlight, action: {
-                                
+                                onAvatarPressed(avatar: avatar)
                             })
                         
                             .removeListRowFormatting()
@@ -132,5 +136,9 @@ extension ProfileView {
         try? await Task.sleep(for: .seconds(1))
         isLoading = false
         avatars = AvatarModel.mocks
+    }
+    private func onAvatarPressed(avatar: AvatarModel){
+        let newOption = NavigationPathOption.chat(avatarId: avatar.avatarID)
+        path.append(newOption)
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct CategoryCarouselView: View {
     var images: [String]
     var categories: [CharacterOption]
+    var onCellPressed: ((CharacterOption) -> Void)?
     
     var body: some View {
         ScrollView(.horizontal) {
@@ -17,6 +18,9 @@ struct CategoryCarouselView: View {
                 ForEach(categories.indices, id: \.self) { index in
                     HeroCellView(title: categories[index].plural.capitalized, imageName: images[index])
                         .frame(width: 140, height: 140)
+                        .anyButtonStyle(.plain) {
+                            onCellPressed?(categories[index])
+                        }
                 }
             }
         }
