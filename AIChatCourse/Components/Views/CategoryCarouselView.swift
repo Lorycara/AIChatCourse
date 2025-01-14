@@ -15,7 +15,7 @@ struct CategoryCarouselView: View {
         ScrollView(.horizontal) {
             HStack(spacing: 12) {
                 ForEach(categories.indices, id: \.self) { index in
-                    HeroCellView(title: categories[index].rawValue.capitalized, imageName: images[index])
+                    HeroCellView(title: categories[index].plural.capitalized, imageName: images[index])
                         .frame(width: 140, height: 140)
                 }
             }

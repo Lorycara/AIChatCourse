@@ -20,6 +20,21 @@ enum CharacterOption: String, CaseIterable, Hashable, Codable {
             return false
         }
     }
+    
+    var plural: String{
+        switch self {
+            case .man:
+            return "men"
+        case .woman:
+            return "women"
+        case .alien:
+            return "aliens"
+        case .dog:
+            return "dogs"
+        case .cat:
+            return "cats"
+        }
+    }
 }
 
 enum CharacterAction: String, CaseIterable, Hashable, Codable {

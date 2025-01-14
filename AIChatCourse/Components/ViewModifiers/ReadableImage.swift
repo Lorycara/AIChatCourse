@@ -8,7 +8,7 @@ struct ReadableImage: ViewModifier {
     func body(content: Content) -> some View {
         content
             .overlay(
-                LinearGradient(colors: [shadowColor.opacity(0), shadowColor.opacity(0.6)], startPoint: .top, endPoint: .bottom), alignment: .bottom )
+                LinearGradient(colors: [shadowColor.opacity(0), shadowColor.opacity(0.6)], startPoint: .center, endPoint: .bottom), alignment: .bottom )
     }
     
 }

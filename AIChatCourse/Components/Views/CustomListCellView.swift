@@ -55,6 +55,7 @@ struct CustomListCellView: View {
             CustomListCellView(avatar: AvatarModel.mock)
                 .anyButtonStyle {}
         }
+        .removeListRowFormatting()
     }
 //    .scrollContentBackground(.hidden)
 }
